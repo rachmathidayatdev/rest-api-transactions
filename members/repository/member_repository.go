@@ -21,11 +21,29 @@ func (connection *DBHandler) GetMember(payload map[string]interface{}) ([]models
 	var totalData int
 	members := []models.Members{}
 
-	error := connection.DB.Find(&members).Count(&totalData).Error
+	tx := connection.DB.Begin()
 
-	error = connection.DB.Limit(payload["limit"].(int)).Offset(payload["offset"].(int)).Find(&members).Error
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
 
-	return members, totalData, error
+	if error := tx.Error; error != nil {
+		return members, totalData, error
+	}
+
+	if error := connection.DB.Find(&members).Count(&totalData).Error; error != nil {
+		tx.Rollback()
+		return members, totalData, error
+	}
+
+	if error := connection.DB.Limit(payload["limit"].(int)).Offset(payload["offset"].(int)).Find(&members).Error; error != nil {
+		tx.Rollback()
+		return members, totalData, error
+	}
+
+	return members, totalData, tx.Commit().Error
 }
 
 //CreateMember func
@@ -48,13 +66,13 @@ func (connection *DBHandler) CreateMember(payload map[string]interface{}) error 
 		}
 	}()
 
-	if err := tx.Error; err != nil {
-		return err
+	if error := tx.Error; error != nil {
+		return error
 	}
 
-	if err := tx.Create(&member).Error; err != nil {
+	if error := tx.Create(&member).Error; error != nil {
 		tx.Rollback()
-		return err
+		return error
 	}
 
 	return tx.Commit().Error

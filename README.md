@@ -1,3 +1,6 @@
 # rest-api-transactions
 
-Tutorial Rest API menggunakan GO dengan design PATTERN Repository dan menggunakan TRANSACTION dalam querynya.
+Tutorial Rest API menggunakan GO:
+- menggunakan pattern repository
+- menggunakan transaction dalam query
+- menggunakan unit test

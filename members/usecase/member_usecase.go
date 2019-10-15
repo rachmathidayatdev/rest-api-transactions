@@ -29,3 +29,10 @@ func (m *MemberUsecase) CreateMember(payload map[string]interface{}) error {
 	error := m.MRepository.CreateMember(payload)
 	return error
 }
+
+//TestGetMember func
+// func (m *MemberUsecase) TestGetMember(payload map[string]interface{}) ([]models.Members, int, error) {
+// 	listMembers, totalData, error := m.MRepository.TestGetMember(payload)
+
+// 	return listMembers, totalData, error
+// }

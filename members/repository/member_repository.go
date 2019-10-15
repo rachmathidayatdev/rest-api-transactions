@@ -77,3 +77,10 @@ func (connection *DBHandler) CreateMember(payload map[string]interface{}) error 
 
 	return tx.Commit().Error
 }
+
+//TestGetMember func
+func (connection *DBHandler) TestGetMember(payload map[string]interface{}) ([]models.Members, int, error) {
+	var error error
+	var totalData int
+	return []models.Members{}, totalData, error
+}

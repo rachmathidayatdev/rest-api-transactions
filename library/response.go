@@ -17,3 +17,17 @@ func ResponseJSON(w http.ResponseWriter, status int, payload interface{}) {
 	w.WriteHeader(status)
 	w.Write([]byte(response))
 }
+
+//MapStringToString func
+func MapStringToString(payload map[string]interface{}) string {
+	var expectedString string
+	expectedData, err := json.Marshal(payload)
+
+	if err != nil {
+		return expectedString
+	}
+
+	expectedString = string(expectedData)
+
+	return expectedString
+}
